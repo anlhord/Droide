@@ -4,6 +4,7 @@ import com.example.m.droide.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -54,6 +55,10 @@ public class FullscreenActivity extends Activity {
     private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
 
 
+    private SystemUiHider mSystemUiHider;
+   private  View.OnTouchListener mDelayHideTouchListener;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +67,28 @@ public class FullscreenActivity extends Activity {
 
         Display display = getWindowManager().getDefaultDisplay();
 
+        final View contentView = findViewById(R.id.imageView1);
+        final ImageView mImageView = (ImageView)findViewById(R.id.imageView1);
 
-        ImageView mImageView = (ImageView)findViewById(R.id.imageView1);
-        Bitmap newImage = Bitmap.createBitmap(display.getWidth(), display.getHeight(),
+        mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
+
+                // Set up the user interaction to manually show or hide the system UI.
+                       contentView.setOnClickListener(new View.OnClickListener() {
+                                                          @Override
+                                                          public void onClick(View view) {
+                                                                                                             mSystemUiHider.hide();
+                                                                      }
+                                                      });
+                    mSystemUiHider.setup();
+
+        int bigedge = display.getWidth();
+        int smalledge = display.getHeight();
+        if (bigedge < smalledge) {
+            bigedge = smalledge;
+            smalledge = display.getWidth();
+        }
+
+        Bitmap newImage = Bitmap.createBitmap(bigedge, smalledge,
                 Config.ARGB_8888);
 
         Canvas c = new Canvas(newImage);
@@ -79,6 +103,16 @@ public class FullscreenActivity extends Activity {
         mImageView.setImageBitmap(newImage);
 
 
+    }
+
+
+    @Override
+       protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        mSystemUiHider.hide();
     }
 
 }
