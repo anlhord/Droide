@@ -4,11 +4,13 @@ import com.example.m.droide.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 
 /**
@@ -55,6 +57,9 @@ public class FullscreenActivity extends Activity {
 //        final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
 
+        final TextView txt_view = (TextView) findViewById(R.id.fullscreen_content);
+
+
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
         mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
@@ -99,6 +104,15 @@ public class FullscreenActivity extends Activity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
      //   findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+
+            // basically here i set the font
+
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/LiberationMonoRegular.ttf");
+
+//        setTypeface(custom_font);
+        txt_view.setTypeface(custom_font, 0);
+
     }
 
     @Override
