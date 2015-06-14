@@ -11,7 +11,17 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.view.Display;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -50,8 +60,24 @@ public class FullscreenActivity extends Activity {
 
         setContentView(R.layout.activity_fullscreen);
 
-// killed crap
-        
+        Display display = getWindowManager().getDefaultDisplay();
+
+
+        ImageView mImageView = (ImageView)findViewById(R.id.imageView1);
+        Bitmap newImage = Bitmap.createBitmap(display.getWidth(), display.getHeight(),
+                Config.ARGB_8888);
+
+        Canvas c = new Canvas(newImage);
+//        c.drawBitmap(bm, 0, 0, null);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setStyle(Style.FILL);
+        paint.setTextSize(20);
+        c.drawText("Some Text", 0, 25, paint);
+
+        mImageView.setImageBitmap(newImage);
+
 
     }
 
