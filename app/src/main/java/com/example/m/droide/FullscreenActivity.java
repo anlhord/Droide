@@ -3,6 +3,7 @@ package com.example.m.droide;
 import com.example.m.droide.util.SystemUiHider;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -41,7 +44,7 @@ public class FullscreenActivity extends Activity {
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
      * user interaction before hiding the system UI.
      */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
+    private static final int AUTO_HIDE_DELAY_MILLIS = 0;
 
     /**
      * If set, will toggle the system UI visibility upon interaction. Otherwise,
@@ -58,10 +61,22 @@ public class FullscreenActivity extends Activity {
     private SystemUiHider mSystemUiHider;
    private  View.OnTouchListener mDelayHideTouchListener;
 
+    @TargetApi(11)
+    private void hidebar() {
+
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);   //new
+        getActionBar().hide();                                   //new
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        hidebar();
 
         setContentView(R.layout.activity_fullscreen);
 
@@ -71,15 +86,26 @@ public class FullscreenActivity extends Activity {
         final ImageView mImageView = (ImageView)findViewById(R.id.imageView1);
 
         mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
+        mSystemUiHider.setup();
+        mSystemUiHider
+                .setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
 
-                // Set up the user interaction to manually show or hide the system UI.
-                       contentView.setOnClickListener(new View.OnClickListener() {
-                                                          @Override
-                                                          public void onClick(View view) {
-                                                                                                             mSystemUiHider.hide();
-                                                                      }
-                                                      });
-                    mSystemUiHider.setup();
+                    @Override
+                    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+                    public void onVisibilityChange(boolean visible) {
+                        mSystemUiHider.hide();
+                    }
+                });
+
+        // Set up the user interaction to manually show or hide the system UI.
+        contentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSystemUiHider.hide();
+            }
+        });
+
+
 
         int bigedge = display.getWidth();
         int smalledge = display.getHeight();
@@ -110,7 +136,6 @@ public class FullscreenActivity extends Activity {
        protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         mSystemUiHider.hide();
     }
