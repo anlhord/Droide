@@ -57,10 +57,6 @@ public class FullscreenActivity extends Activity {
      */
     private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
 
-
-    private SystemUiHider mSystemUiHider;
-   private  View.OnTouchListener mDelayHideTouchListener;
-
     @TargetApi(11)
     private void hidebar() {
 
@@ -85,26 +81,6 @@ public class FullscreenActivity extends Activity {
         final View contentView = findViewById(R.id.imageView1);
         final ImageView mImageView = (ImageView)findViewById(R.id.imageView1);
 
-        mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
-        mSystemUiHider.setup();
-        mSystemUiHider
-                .setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
-
-                    @Override
-                    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-                    public void onVisibilityChange(boolean visible) {
-                        mSystemUiHider.hide();
-                    }
-                });
-
-        // Set up the user interaction to manually show or hide the system UI.
-        contentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSystemUiHider.hide();
-            }
-        });
-
 
 
         int bigedge = display.getWidth();
@@ -120,24 +96,37 @@ public class FullscreenActivity extends Activity {
         Canvas c = new Canvas(newImage);
 //        c.drawBitmap(bm, 0, 0, null);
 
+        c.drawColor(0xffffffff);
+
+
+
         Paint paint = new Paint();
-        paint.setColor(Color.RED);
+        paint.setColor(Color.BLACK);
         paint.setStyle(Style.FILL);
-        paint.setTextSize(20);
+        paint.setTextSize(15);
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         c.drawText("Some Text", 0, 25, paint);
+/*
+        float poss[160] = new
+
+
+        float inc = bigedge;
+        inc /= 80.;
+
+        for (int i = 0; i < 80; i++) {
+            poss[2*i+1] = i * inc;
+            poss[2*i] = 30;
+        }
+*/
+        char[] txt = "abcdefghij0123456789abcdefghij0123456789abcdefghij0123456789abcdefghij0123456789".toCharArray();
+
+
+        c.drawText(txt, 0, 80, 20, 20, paint);
 
         mImageView.setImageBitmap(newImage);
 
 
     }
 
-
-    @Override
-       protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-
-        mSystemUiHider.hide();
-    }
 
 }
