@@ -34,6 +34,12 @@ import android.view.Display;
  * @see SystemUiHider
  */
 public class FullscreenActivity extends Activity {
+
+
+    private static final int SCROLLBAR_WIDTH = 80;
+
+
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -57,13 +63,29 @@ public class FullscreenActivity extends Activity {
      */
     private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
 
-    @TargetApi(11)
     private void hidebar() {
+
+        if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+            ActionBar actionBar = getActionBar();
+            actionBar.hide();
+        }
+/*
+
+
+////// problem=not work on old android
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);   //new
         getActionBar().hide();                                   //new
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
+              */
     }
 
     @Override
@@ -103,30 +125,45 @@ public class FullscreenActivity extends Activity {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Style.FILL);
-        paint.setTextSize(15);
+        paint.setTextSize(16);
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        c.drawText("Some Text", 0, 25, paint);
-/*
-        float poss[160] = new
+        paint.setTypeface(Typeface.MONOSPACE);
 
-
-        float inc = bigedge;
-        inc /= 80.;
-
-        for (int i = 0; i < 80; i++) {
-            poss[2*i+1] = i * inc;
-            poss[2*i] = 30;
-        }
-*/
         char[] txt = "abcdefghij0123456789abcdefghij0123456789abcdefghij0123456789abcdefghij0123456789".toCharArray();
 
 
-        c.drawText(txt, 0, 80, 20, 20, paint);
+        c.drawText(txt, 0, 80, 5, 20, paint);
+
+
+        Bitmap scrollBar = Bitmap.createBitmap(SCROLLBAR_WIDTH, smalledge,
+                Config.ARGB_8888);
+
+
+        int foo = 0;
+
+
+        for (int y = 0; y < smalledge; y++) {
+            for (int x = 0; x < SCROLLBAR_WIDTH; x++) {
+
+
+                if ((foo & 1)==0) {
+
+                    scrollBar.setPixel(x, y, Color.BLACK);
+                }
+
+                foo++;
+            }
+
+        }
+
+
+        c.drawBitmap(scrollBar, bigedge- SCROLLBAR_WIDTH, 0, null);
 
         mImageView.setImageBitmap(newImage);
 
 
-    }
 
+
+    }
 
 }
