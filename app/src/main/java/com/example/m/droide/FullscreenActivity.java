@@ -36,7 +36,7 @@ import android.view.Display;
 public class FullscreenActivity extends Activity {
 
 
-    private static final int SCROLLBAR_WIDTH = 80;
+    private static final int SCROLLBAR_WIDTH = 54;
 
 
 
@@ -125,15 +125,16 @@ public class FullscreenActivity extends Activity {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Style.FILL);
-        paint.setTextSize(16);
+        paint.setTextSize(15);
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setTypeface(Typeface.MONOSPACE);
 
-        char[] txt = "abcdefghij0123456789abcdefghij0123456789abcdefghij0123456789abcdefghij0123456789".toCharArray();
+        char[] txt = "012abcdefghij0123456789abcdefghij0123456789abcdefghij0123456789abcdefghij0123456789".toCharArray();
+        char[] lnum = "0123456789\0".toCharArray();
 
-
-        c.drawText(txt, 0, 80, 5, 20, paint);
-
+        for (int i = 0; i < 41; i++) {
+            c.drawText(txt, 0, 84, 0, 15*i, paint);
+        }
 
         Bitmap scrollBar = Bitmap.createBitmap(SCROLLBAR_WIDTH, smalledge,
                 Config.ARGB_8888);
