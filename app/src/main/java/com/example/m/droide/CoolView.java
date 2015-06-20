@@ -50,6 +50,9 @@ public class CoolView extends ImageView {
     }
 
     private void sharedConstructing(Context context) {
+
+        CoolDocument();
+
         setWillNotDraw(false);
         super.setClickable(true);
         super.setOnTouchListener(new PrivateOnTouchListener());
@@ -64,6 +67,15 @@ public class CoolView extends ImageView {
 
     }
 
+    public void CoolDocument() {
+        for (int i = 0; i < 100; i++) {
+            String r = Long.toHexString(Double.doubleToLongBits(Math.random()));
+            String rr = r+r+r+r+r+r+r+r+r+r+r+r;
+            char[] row = rr.toCharArray();
+            document.put(i, row);
+        }
+
+    }
 
     @Override
     protected void onDraw(Canvas c) {
@@ -84,12 +96,7 @@ public class CoolView extends ImageView {
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setTypeface(Typeface.MONOSPACE);
 
-        for (int i = 0; i < 100; i++) {
-            String r = Long.toHexString(Double.doubleToLongBits(Math.random()));
-            String rr = r+r+r+r+r+r+r+r+r+r+r+r;
-            char[] row = rr.toCharArray();
-            document.put(i, row);
-        }
+
         for (int i = 0; i < 41; i++) {
             c.drawText(document.get(i), 0, 83, 0, 15*i + ((int)ydisp)%15, paint);
         }
@@ -150,8 +157,10 @@ public class CoolView extends ImageView {
 
             ydisp =  Math.random();
 
- //           invalidate();
-//            postInvalidate();
+            CoolDocument();
+
+            invalidate();
+            postInvalidate();
 
             return true;
         }
