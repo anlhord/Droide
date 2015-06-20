@@ -1,6 +1,6 @@
 package com.example.m.droide;
 
-import com.example.m.droide.util.SystemUiHider;
+//  import com.example.m.droide.util.DocRow;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -27,14 +27,23 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.view.Display;
 
+import java.util.HashMap;
+
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
  */
 public class FullscreenActivity extends Activity {
 
+    Bitmap newImage;
+    public Canvas c;
+
+    public HashMap<Integer, char[]> document = new HashMap<Integer, char[]>();
+    ;
+    public int row = 0;
+
+
+    public double ydisp = 0.0;
+
+    // pixel width of scrollbar
 
     private static final int SCROLLBAR_WIDTH = 54;
 
@@ -58,10 +67,7 @@ public class FullscreenActivity extends Activity {
      */
     private static final boolean TOGGLE_ON_CLICK = true;
 
-    /**
-     * The flags to pass to {@link SystemUiHider#getInstance}.
-     */
-    private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
+
 
     private void hidebar() {
 
@@ -98,12 +104,23 @@ public class FullscreenActivity extends Activity {
 
         setContentView(R.layout.activity_fullscreen);
 
+
+
+
+
+
+        reDraw();
+
+    }
+
+
+    protected void reDraw() {
+
         Display display = getWindowManager().getDefaultDisplay();
 
-        final View contentView = findViewById(R.id.imageView1);
-        final ImageView mImageView = (ImageView)findViewById(R.id.imageView1);
 
 
+        final ImageView mImageView = (ImageView) findViewById(R.id.imageView1);
 
         int bigedge = display.getWidth();
         int smalledge = display.getHeight();
@@ -112,10 +129,12 @@ public class FullscreenActivity extends Activity {
             smalledge = display.getWidth();
         }
 
-        Bitmap newImage = Bitmap.createBitmap(bigedge, smalledge,
+
+
+        newImage = Bitmap.createBitmap(bigedge, smalledge,
                 Config.ARGB_8888);
 
-        Canvas c = new Canvas(newImage);
+        c = new Canvas(newImage);
 //        c.drawBitmap(bm, 0, 0, null);
 
         c.drawColor(0xffffffff);
@@ -129,11 +148,14 @@ public class FullscreenActivity extends Activity {
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setTypeface(Typeface.MONOSPACE);
 
-        char[] txt = "012abcdefghij0123456789abcdefghij0123456789abcdefghij0123456789abcdefghij0123456789".toCharArray();
-        char[] lnum = "0123456789\0".toCharArray();
-
+        for (int i = 0; i < 100; i++) {
+            String r = Long.toHexString(Double.doubleToLongBits(Math.random()));
+            String rr = r+r+r+r+r+r+r+r+r+r+r+r;
+            char[] row = rr.toCharArray();
+            document.put(i, row);
+        }
         for (int i = 0; i < 41; i++) {
-            c.drawText(txt, 0, 84, 0, 15*i, paint);
+            c.drawText(document.get(i), 0, 83, 0, 15*i + ((int)ydisp)%15, paint);
         }
 
         Bitmap scrollBar = Bitmap.createBitmap(SCROLLBAR_WIDTH, smalledge,
@@ -166,5 +188,30 @@ public class FullscreenActivity extends Activity {
 
 
     }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+
+       float lastX=e.getX();
+       float lastY=e.getY();
+
+
+        switch (e.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+        };
+
+        ydisp =  Math.random();
+
+
+        return true;
+    }
+
+
 
 }
