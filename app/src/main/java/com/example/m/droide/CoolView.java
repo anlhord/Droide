@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -54,6 +53,8 @@ public class CoolView extends ImageView {
         setWillNotDraw(false);
         super.setClickable(true);
         super.setOnTouchListener(new PrivateOnTouchListener());
+        super.requestFocus();
+
 
     }
 
@@ -66,20 +67,11 @@ public class CoolView extends ImageView {
 
     @Override
     protected void onDraw(Canvas c) {
-/*
 
-*/
         super.onDraw(c);
-
-
-
-
 
         Bitmap newImage = Bitmap.createBitmap(bigedge, smalledge,
                 Bitmap.Config.ARGB_8888);
-
- //       c = new Canvas(newImage);
-//        c.drawBitmap(bm, 0, 0, null);
 
         c.drawColor(0xffffffff);
 
@@ -126,15 +118,10 @@ public class CoolView extends ImageView {
 
         c.drawBitmap(scrollBar, bigedge- SCROLLBAR_WIDTH, 0, null);
 
-       //        this.setImageBitmap(newImage);
+        this.setImageBitmap(newImage);
 
-
-        //
     }
 
-    public interface OnTouchImageViewListener {
-        public void onMove();
-    }
 
     private class PrivateOnTouchListener implements OnTouchListener {
 
@@ -163,8 +150,8 @@ public class CoolView extends ImageView {
 
             ydisp =  Math.random();
 
-            invalidate();
-
+ //           invalidate();
+//            postInvalidate();
 
             return true;
         }
