@@ -63,9 +63,19 @@ public class FullscreenActivity extends Activity {
         float desired = (big - mImageView.SCROLLBAR_WIDTH) / 83.f;
         for (float now = -1.f, i = 0.5f; now < desired; i += 0.5f) {
             mImageView.fontsize = i;
-            mImageView.letterwidth = now = CharSize2Width(i);
+            mImageView.charw = now = CharSize2Width(i);
         }
 
+        // obtain text top, bottom y gaps
+
+        Paint paint = new Paint();
+        paint.setTypeface(Typeface.MONOSPACE);
+        paint.setTextSize(mImageView.fontsize);
+        Paint.FontMetrics fm = new Paint.FontMetrics();
+        paint.getFontMetrics(fm);
+        mImageView.fontopy =fm.top;
+        mImageView. fontboty = fm.bottom;
+        fm = null;
 
     }
 
@@ -77,5 +87,4 @@ public class FullscreenActivity extends Activity {
         paint = null;
         return w;
     }
-
 }

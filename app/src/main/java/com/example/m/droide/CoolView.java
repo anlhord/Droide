@@ -24,6 +24,7 @@ public class CoolView extends ImageView {
 
     public HashMap<Integer, char[]> document = new HashMap<Integer, char[]>();
 
+    float fontopy =0.f, fontboty = 0.f;
 
     public double ydisp = 0.0;
 
@@ -31,7 +32,7 @@ public class CoolView extends ImageView {
 
     public static final int SCROLLBAR_WIDTH = 54;
     public float fontsize = 15.f;
-    public float letterwidth = 7.f;
+    public float charw = 7.f;
 
 
     public Bitmap newImage;
@@ -111,11 +112,11 @@ public class CoolView extends ImageView {
         for (int i = 0; i < 41; i++) {
             c.drawText(document.get(i), 0, 83, 0, fontsize*i, paint);
         }
-/*
-        canvas.drawRect(100 - margin, 100 + fm.top - margin,
-                100 + mTxtPaint.measureText(str) + margin, 100 + fm.bottom
-                        + margin, mTxtPaint);
-*/
+
+
+        c.drawRect(5*charw, 7*fontsize ,
+                10*charw , 8*fontsize + fontboty, paint);
+
 
 
         Bitmap scrollBar = Bitmap.createBitmap(SCROLLBAR_WIDTH, smalledge,
