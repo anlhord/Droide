@@ -29,12 +29,12 @@ public class FullscreenActivity extends Activity {
             actionBar.hide();
         }
 
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         hidebar();
@@ -56,31 +56,10 @@ public class FullscreenActivity extends Activity {
         }
         mImageView.bigedge = big;
         mImageView.smalledge = small;
+
+
+
+
     }
 
-    // bisect optimal letter size
-    private PointF b = new PointF(1.0f ,30.0f );
-
-
-    Paint paint = new Paint();
-    paint.setStyle(Paint.Style.FILL);
-
-    Style = Paint.Style.FILL;
-
-/*
-    Paint paint = new Paint();
-    paint.setStyle(Paint.Style.FILL);
-    paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-    paint.setTypeface(Typeface.MONOSPACE);
-
-    paint.setColor(Color.BLACK);
-    paint.setTextSize((float) 15.);
-*/
-
-    /*
-    Paint paint = new Paint();
-    paint.setColor(Color.BLACK);
-    paint.setTextSize((float) 15.);
-    float width = paint.measureText("_");
-*/
 }
