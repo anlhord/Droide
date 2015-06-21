@@ -31,6 +31,7 @@ public class CoolView extends ImageView {
 
     public static final int SCROLLBAR_WIDTH = 54;
     public float fontsize = 15.f;
+    public float letterwidth = 7.f;
 
 
     public Bitmap newImage;
@@ -97,6 +98,8 @@ public class CoolView extends ImageView {
 
         paint.setColor(Color.BLACK);
         paint.setTextSize(fontsize);
+
+
 /*
 // added this to measure the text dimension.
         Paint.FontMetrics fm = new Paint.FontMetrics();
@@ -104,13 +107,15 @@ public class CoolView extends ImageView {
         float top = fm.top;
         float width = paint.measureText("_");
         float bottom = fm.bottom;
-*/
+/**/
         for (int i = 0; i < 41; i++) {
-            c.drawText(document.get(i), 0, 83, 0, 15.f*i, paint);
+            c.drawText(document.get(i), 0, 83, 0, fontsize*i, paint);
         }
-
-
-
+/*
+        canvas.drawRect(100 - margin, 100 + fm.top - margin,
+                100 + mTxtPaint.measureText(str) + margin, 100 + fm.bottom
+                        + margin, mTxtPaint);
+*/
 
 
         Bitmap scrollBar = Bitmap.createBitmap(SCROLLBAR_WIDTH, smalledge,
@@ -158,8 +163,8 @@ public class CoolView extends ImageView {
                     break;
                 case MotionEvent.ACTION_MOVE:
 
-                    String r = Long.toHexString(Double.doubleToLongBits(curr.x - last.x));
-                    document.put(1, r.toCharArray());
+ //                   String r = Long.toHexString(Double.doubleToLongBits(curr.x - last.x));
+  //                  document.put(1, r.toCharArray());
 
                     break;
                 case MotionEvent.ACTION_UP:
@@ -179,7 +184,7 @@ public class CoolView extends ImageView {
 
 
 
-//            CoolDocument();
+           CoolDocument();
 
             invalidate();
             postInvalidate();
