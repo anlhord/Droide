@@ -74,7 +74,7 @@ public class CoolView extends ImageView {
             char[] row = rr.toCharArray();
             document.put(i, row);
         }
-
+ //       document.put(4, Long.toHexString(bigedge).toCharArray());
     }
 
     @Override
@@ -90,16 +90,27 @@ public class CoolView extends ImageView {
 
 
         Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
-        paint.setTextSize(15);
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setTypeface(Typeface.MONOSPACE);
 
+        paint.setColor(Color.BLACK);
+        paint.setTextSize((float) 15.);
+
+// added this to measure the text dimension.
+        Paint.FontMetrics fm = new Paint.FontMetrics();
+        paint.getFontMetrics(fm);
+        float top = fm.top;
+        float width = paint.measureText("_");
+        float bottom = fm.bottom;
 
         for (int i = 0; i < 41; i++) {
-            c.drawText(document.get(i), 0, 83, 0, 15*i + ((int)ydisp)%15, paint);
+            c.drawText(document.get(i), 0, 83, 0, fm.top + (fm.bottom+fm.top)*i, paint);
         }
+
+
+
+
 
         Bitmap scrollBar = Bitmap.createBitmap(SCROLLBAR_WIDTH, smalledge,
                 Bitmap.Config.ARGB_8888);
@@ -145,6 +156,10 @@ public class CoolView extends ImageView {
                     last.set(curr);
                     break;
                 case MotionEvent.ACTION_MOVE:
+
+                    String r = Long.toHexString(Double.doubleToLongBits(curr.x - last.x));
+                    document.put(1, r.toCharArray());
+
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
@@ -157,7 +172,13 @@ public class CoolView extends ImageView {
 
             ydisp =  Math.random();
 
-            CoolDocument();
+
+
+            //here need to
+
+
+
+//            CoolDocument();
 
             invalidate();
             postInvalidate();
