@@ -29,7 +29,8 @@ public class CoolView extends ImageView {
 
     // pixel width of scrollbar
 
-    private static final int SCROLLBAR_WIDTH = 54;
+    public static final int SCROLLBAR_WIDTH = 54;
+    public float fontsize = 15.f;
 
 
     public Bitmap newImage;
@@ -95,17 +96,17 @@ public class CoolView extends ImageView {
         paint.setTypeface(Typeface.MONOSPACE);
 
         paint.setColor(Color.BLACK);
-        paint.setTextSize((float) 15.);
-
+        paint.setTextSize(fontsize);
+/*
 // added this to measure the text dimension.
         Paint.FontMetrics fm = new Paint.FontMetrics();
         paint.getFontMetrics(fm);
         float top = fm.top;
         float width = paint.measureText("_");
         float bottom = fm.bottom;
-
+*/
         for (int i = 0; i < 41; i++) {
-            c.drawText(document.get(i), 0, 83, 0, fm.top + (fm.bottom+fm.top)*i, paint);
+            c.drawText(document.get(i), 0, 83, 0, 15.f*i, paint);
         }
 
 

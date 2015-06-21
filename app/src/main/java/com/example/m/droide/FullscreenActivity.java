@@ -57,9 +57,24 @@ public class FullscreenActivity extends Activity {
         mImageView.bigedge = big;
         mImageView.smalledge = small;
 
+        // obtain optimal letter size
+/*
 
+        float desired = (big - mImageView.SCROLLBAR_WIDTH) / 83.f;
+        for (float i = 0.5f; CharSize2Width(i) < desired; i += 0.5f) {
+            mImageView.fontsize = i;
+        }
+*/
 
+    }
 
+    private float CharSize2Width(float w) {
+        Paint paint = new Paint();
+        paint.setTypeface(Typeface.MONOSPACE);
+        paint.setTextSize((float) 15.);
+        w =  paint.measureText("M");
+        paint = null;
+        return w;
     }
 
 }
