@@ -24,7 +24,8 @@ public class CoolView extends ImageView {
 
     public HashMap<Integer, char[]> document = new HashMap<Integer, char[]>();
 
-    float fontopy =0.f, fontboty = 0.f;
+    float fontopy =0.f; // negative?
+    float fontboty = 0.f;
 
     public double ydisp = 0.0;
 
@@ -32,6 +33,8 @@ public class CoolView extends ImageView {
 
     public static final int SCROLLBAR_WIDTH = 54;
     public float fontsize = 15.f;
+    public float fontsizep = 15.f;
+
     public float charw = 7.f;
 
 
@@ -90,6 +93,13 @@ public class CoolView extends ImageView {
 
         c.drawColor(0xffffffff);
 
+        Paint wpaint = new Paint();
+        wpaint.setStyle(Paint.Style.FILL);
+        wpaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        wpaint.setTypeface(Typeface.MONOSPACE);
+
+        wpaint.setColor(Color.WHITE);
+        wpaint.setTextSize(fontsize);
 
 
         Paint paint = new Paint();
@@ -110,12 +120,14 @@ public class CoolView extends ImageView {
         float bottom = fm.bottom;
 /**/
         for (int i = 0; i < 41; i++) {
-            c.drawText(document.get(i), 0, 83, 0, fontsize*i, paint);
+            c.drawText(document.get(i), 0, 83, 0, fontsizep * i, paint);
+/*
+            // small selection
+            c.drawRect(5*charw, (i-1)*fontsizep + fontboty/2,
+                    10*charw , i*fontsizep + fontboty, paint);
+            c.drawText(document.get(8), 5, 10-5, 5*charw, fontsizep*i, wpaint);
+*/
         }
-
-
-        c.drawRect(5*charw, 7*fontsize ,
-                10*charw , 8*fontsize + fontboty, paint);
 
 
 
