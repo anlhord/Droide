@@ -19,28 +19,31 @@ import java.util.HashMap;
  */
 public class CoolView extends ImageView {
 
+    // basically the size of the rectangle
+
     public int bigedge = 800;  // some defaults
     public int smalledge = 600;
 
+    // basically the document
+
     public HashMap<Integer, char[]> document = new HashMap<Integer, char[]>();
 
+    // basically main font size
+
+    public float fontsize = 15.f;
+    public float fontsizep = 15.f;  // fontsize + 1
+
+    // basically font metrics
+
+    public float charw = 7.f;
     float fontopy =0.f; // negative?
     float fontboty = 0.f;
-
-    public double ydisp = 0.0;
 
     // pixel width of scrollbar
 
     public static final int SCROLLBAR_WIDTH = 54;
-    public float fontsize = 15.f;
-    public float fontsizep = 15.f;
 
-    public float charw = 7.f;
-
-
-    public Bitmap newImage;
-
-
+    
     public CoolView(Context context) {
         super(context);
         sharedConstructing(context);
@@ -189,7 +192,6 @@ public class CoolView extends ImageView {
  //               touchImageViewListener.onMove();
  //           }
 
-            ydisp =  Math.random();
 
 
 
