@@ -43,7 +43,12 @@ public class CoolView extends ImageView {
 
     public static final int SCROLLBAR_WIDTH = 54;
 
-    
+    // on-screen-selection top x,y, end x,y
+    // if endy < topy, rectangular selection
+
+    int oss_tx = 3, oss_ty = 3, oss_ex = 7, oss_ey = 7;
+
+
     public CoolView(Context context) {
         super(context);
         sharedConstructing(context);
@@ -124,12 +129,16 @@ public class CoolView extends ImageView {
 /**/
         for (int i = 0; i < 41; i++) {
             c.drawText(document.get(i), 0, 83, 0, fontsizep * i, paint);
-/*
-            // small selection
-            c.drawRect(5*charw, (i-1)*fontsizep + fontboty/2,
-                    10*charw , i*fontsizep + fontboty, paint);
-            c.drawText(document.get(8), 5, 10-5, 5*charw, fontsizep*i, wpaint);
-*/
+
+            if (i >= oss_ty && i < oss_ey) {
+                // small selection
+                c.drawRect(oss_tx*charw, (i-1)*fontsizep + fontboty/2,
+                        oss_ex*charw , i*fontsizep + fontboty, paint);
+                c.drawText(document.get(i), oss_tx, oss_ex-oss_tx, oss_tx*charw, fontsizep*i, wpaint);
+
+
+            }
+
         }
 
 
