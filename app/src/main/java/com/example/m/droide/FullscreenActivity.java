@@ -60,7 +60,7 @@ public class FullscreenActivity extends Activity {
         // obtain optimal letter size
 
 
-        float desired = (big - mImageView.SCROLLBAR_WIDTH) / 83.f;
+        float desired = (big - mImageView.SCROLLBAR_WIDTH) / ((float) mImageView.TOTALCOLS);
         for (float now = -1.f, i = 0.5f; now < desired; i += 0.5f) {
             mImageView.fontsize = i;
             mImageView.fontsizep = i+1.f;

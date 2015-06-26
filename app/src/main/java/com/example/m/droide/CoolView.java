@@ -19,6 +19,11 @@ import java.util.HashMap;
  */
 public class CoolView extends ImageView {
 
+    // 80 cols and 3 line number digits
+
+    public static final int TOTALCOLS = 83;
+    public static final boolean WIDESELECTION = true;
+
     // basically the size of the rectangle
 
     public int bigedge = 800;  // some defaults
@@ -130,11 +135,23 @@ public class CoolView extends ImageView {
         for (int i = 0; i < 41; i++) {
             c.drawText(document.get(i), 0, 83, 0, fontsizep * i, paint);
 
-            if (i >= oss_ty && i < oss_ey) {
+            if (i >= oss_ty && i <= oss_ey) {
                 // small selection
-                c.drawRect(oss_tx*charw, (i-1)*fontsizep + fontboty/2,
-                        oss_ex*charw , i*fontsizep + fontboty, paint);
-                c.drawText(document.get(i), oss_tx, oss_ex-oss_tx, oss_tx*charw, fontsizep*i, wpaint);
+
+                int xl = oss_tx;
+                int xr = oss_ex;
+
+                if (WIDESELECTION && i != oss_ey) {
+                    xr = 83;
+                }
+
+                if (WIDESELECTION && i != oss_ty) {
+                    xl = 0;
+                }
+
+                c.drawRect(xl*charw, (i-1)*fontsizep + fontboty/2,
+                        xr*charw , i*fontsizep + fontboty, paint);
+                c.drawText(document.get(i), xl, xr-xl, xl*charw, fontsizep*i, wpaint);
 
 
             }
