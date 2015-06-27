@@ -202,8 +202,18 @@ public class CoolView extends ImageView {
             switch (e.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     last.set(curr);
+
+                    oss_tx = (int) (last.x / charw);
+                    oss_ty = (int) (last.y / fontsizep);
+
+
                     break;
                 case MotionEvent.ACTION_MOVE:
+
+
+                    oss_ex = (int) (curr.x / charw);
+                    oss_ey = (int) (curr.y / fontsizep);
+
 
  //                   String r = Long.toHexString(Double.doubleToLongBits(curr.x - last.x));
   //                  document.put(1, r.toCharArray());
@@ -211,6 +221,11 @@ public class CoolView extends ImageView {
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
+
+                    oss_ex = (int) (curr.x / charw);
+                    oss_ey = (int) (curr.y / fontsizep);
+
+                    
                     break;
             };
 
