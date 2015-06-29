@@ -48,6 +48,27 @@ public class CoolView extends ImageView {
 
     public static final int SCROLLBAR_WIDTH = 54;
 
+
+    // on screen letter drag
+
+    int osd_sx = 0, osd_sy = 0, osd_ex = 0, osd_ey = 0;
+
+
+    private void osd2oss() {
+        // if start and end is
+        if ((osd_sy > osd_ey) || ((osd_sy == osd_ey) && (osd_sx > osd_ex))) {
+            oss_tx = osd_ex;
+            oss_ty = osd_ey;
+            oss_ex = osd_sx;
+            oss_ey = osd_sy;
+        } else {
+            oss_tx = osd_sx;
+            oss_ty = osd_sy;
+            oss_ex = osd_ex;
+            oss_ey = osd_ey;
+        }
+    }
+
     // on-screen-selection top x,y, end x,y
     // if endy < topy, rectangular selection
 
@@ -132,8 +153,11 @@ public class CoolView extends ImageView {
         float width = paint.measureText("_");
         float bottom = fm.bottom;
 /**/
-        for (int i = 0; i < 41; i++) {
-            c.drawText(document.get(i), 0, 83, 0, fontsizep * i, paint);
+
+        // on some screens up to 41
+
+        for (int i = 0; i < 30; i++) {
+            c.drawText(document.get(i), 0, 83, 0, (i+1) * fontsizep, paint);
 
             if (i >= oss_ty && i <= oss_ey) {
                 // small selection
@@ -149,10 +173,17 @@ public class CoolView extends ImageView {
                     xl = 0;
                 }
 
-                c.drawRect(xl*charw, (i-1)*fontsizep + fontboty/2,
-                        xr*charw , i*fontsizep + fontboty, paint);
-                c.drawText(document.get(i), xl, xr-xl, xl*charw, fontsizep*i, wpaint);
+                c.drawRect(xl*charw, (i+0)*fontsizep + fontboty/2,
+                        xr*charw , (i+1)*fontsizep + fontboty, paint);
 
+
+                    if (xl < xr) {
+
+
+                        c.drawText(document.get(i), xl, xr - xl, xl * charw, fontsizep * (i + 1), wpaint);
+
+
+                    }
 
             }
 
@@ -203,17 +234,19 @@ public class CoolView extends ImageView {
                 case MotionEvent.ACTION_DOWN:
                     last.set(curr);
 
-                    oss_tx = (int) (last.x / charw);
-                    oss_ty = (int) (last.y / fontsizep);
+                    osd_sx = (int) (0.2 + last.x / charw);
+                    osd_sy = (int) (last.y / fontsizep);
 
+                    osd2oss();
 
                     break;
                 case MotionEvent.ACTION_MOVE:
 
 
-                    oss_ex = (int) (curr.x / charw);
-                    oss_ey = (int) (curr.y / fontsizep);
+                    osd_ex = (int) (0.2 + curr.x / charw);
+                    osd_ey = (int) (curr.y / fontsizep);
 
+                    osd2oss();
 
  //                   String r = Long.toHexString(Double.doubleToLongBits(curr.x - last.x));
   //                  document.put(1, r.toCharArray());
@@ -222,10 +255,12 @@ public class CoolView extends ImageView {
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
 
-                    oss_ex = (int) (curr.x / charw);
-                    oss_ey = (int) (curr.y / fontsizep);
+                    osd_ex = (int) (0.2 + curr.x / charw);
+                    osd_ey = (int) (curr.y / fontsizep);
 
-                    
+
+                    osd2oss();
+
                     break;
             };
 
@@ -242,7 +277,7 @@ public class CoolView extends ImageView {
 
            CoolDocument();
 
-            invalidate();
+  //          invalidate();
             postInvalidate();
 
             return true;
