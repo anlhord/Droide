@@ -54,7 +54,20 @@ public class CoolView extends ImageView {
     int osd_sx = 0, osd_sy = 0, osd_ex = 0, osd_ey = 0;
 
 
+    // begin selection treshold
+
+    public static final int OSD_BEGIN_X = 13;
+    public static final int OSD_BEGIN_Y = 2;
+
+
+    boolean osd_lock = false;  // this is the lock that begins a selection
+
+
     private void osd2oss() {
+
+        oscx = osd_ex;
+        oscy = osd_ey;
+
         // if start and end is
         if ((osd_sy > osd_ey) || ((osd_sy == osd_ey) && (osd_sx > osd_ex))) {
             oss_tx = osd_ex;
@@ -75,6 +88,36 @@ public class CoolView extends ImageView {
     int oss_tx = 3, oss_ty = 3, oss_ex = 7, oss_ey = 7;
 
 
+    // on-screen-cursor
+
+    int oscx = 8, oscy = 8;
+
+
+    // cached scroll bar
+    Bitmap scrollBar;
+
+    public void initScrollBar() {
+        scrollBar = Bitmap.createBitmap(SCROLLBAR_WIDTH, smalledge,
+                Bitmap.Config.ARGB_8888);
+
+        int foo = 0;
+
+
+        for (int y = 0; y < smalledge; y++) {
+            for (int x = 0; x < SCROLLBAR_WIDTH; x++) {
+
+
+                if ((foo & 1)==0) {
+
+                    scrollBar.setPixel(x, y, Color.BLACK);
+                }
+
+                foo++;
+            }
+
+        }
+    }
+
     public CoolView(Context context) {
         super(context);
         sharedConstructing(context);
@@ -92,6 +135,8 @@ public class CoolView extends ImageView {
     private void sharedConstructing(Context context) {
 
         CoolDocument();
+
+        initScrollBar();
 
         setWillNotDraw(false);
         super.setClickable(true);
@@ -121,9 +166,6 @@ public class CoolView extends ImageView {
     protected void onDraw(Canvas c) {
 
         super.onDraw(c);
-
-        Bitmap newImage = Bitmap.createBitmap(bigedge, smalledge,
-                Bitmap.Config.ARGB_8888);
 
         c.drawColor(0xffffffff);
 
@@ -159,7 +201,7 @@ public class CoolView extends ImageView {
         for (int i = 0; i < 30; i++) {
             c.drawText(document.get(i), 0, 83, 0, (i+1) * fontsizep, paint);
 
-            if (i >= oss_ty && i <= oss_ey) {
+            if ((i >= oss_ty && i <= oss_ey) && osd_lock) {
                 // small selection
 
                 int xl = oss_tx;
@@ -189,40 +231,28 @@ public class CoolView extends ImageView {
 
         }
 
+        c.drawRect(oscx*charw - 1.0f, (oscy+0)*fontsizep + fontboty/2,
+                oscx*charw + 1.0f, (oscy+1)*fontsizep + fontboty, paint);
 
 
-        Bitmap scrollBar = Bitmap.createBitmap(SCROLLBAR_WIDTH, smalledge,
-                Bitmap.Config.ARGB_8888);
 
-
-        int foo = 0;
-
-
-        for (int y = 0; y < smalledge; y++) {
-            for (int x = 0; x < SCROLLBAR_WIDTH; x++) {
-
-
-                if ((foo & 1)==0) {
-
-                    scrollBar.setPixel(x, y, Color.BLACK);
-                }
-
-                foo++;
-            }
-
-        }
-
+        // paint scroll bar
 
         c.drawBitmap(scrollBar, bigedge- SCROLLBAR_WIDTH, 0, null);
-
-        this.setImageBitmap(newImage);
-
     }
 
 
     private class PrivateOnTouchListener implements OnTouchListener {
 
         private PointF last = new PointF();
+
+        private int abs(int d) {
+
+            if (d < 0) {
+                return -d;
+            }
+            return d;
+        }
 
         @Override
         public boolean onTouch(View v, MotionEvent e) {
@@ -233,6 +263,8 @@ public class CoolView extends ImageView {
             switch (e.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     last.set(curr);
+
+                    osd_lock = false;
 
                     osd_sx = (int) (0.2 + last.x / charw);
                     osd_sy = (int) (last.y / fontsizep);
@@ -246,6 +278,14 @@ public class CoolView extends ImageView {
                     osd_ex = (int) (0.2 + curr.x / charw);
                     osd_ey = (int) (curr.y / fontsizep);
 
+                    // if i'm far, lock drag
+
+
+                 if   ((abs(osd_ex - osd_sx) > OSD_BEGIN_X) || (abs(osd_ey - osd_sy) > OSD_BEGIN_Y)) {
+                     osd_lock = true;
+
+                }
+
                     osd2oss();
 
  //                   String r = Long.toHexString(Double.doubleToLongBits(curr.x - last.x));
@@ -257,7 +297,6 @@ public class CoolView extends ImageView {
 
                     osd_ex = (int) (0.2 + curr.x / charw);
                     osd_ey = (int) (curr.y / fontsizep);
-
 
                     osd2oss();
 
